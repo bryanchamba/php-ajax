@@ -1,14 +1,25 @@
+function onResponse(r){
+    if(r.ok){
+        return r.text();
+    }else{
+        throw "Error en la llamada Ajax.";
+    }
+}
+
 function onSuccess(r){
-    document.getElementById('result').innerHTML = r;
+    document.getElementById('r1').innerHTML = r;
 }
 
 function getAnyData(){
-    fetch('backend.php')
-        .then( response => response.text() )
-        .then( result => onSuccess(result) )
-        .catch( err => console.log(err) );
-}
+    const data = new FormData();
+    data.append('dato1', 'texto');
+    data.append('dato2', 125);
 
-document.addEventListener('DOMContentLoaded', function() {
-    getAnyData();
-});
+    fetch('backend.php', {
+        method: 'POST',
+        body: data
+    })
+    .then( response => onResponse(response) )
+    .then( result => onSuccess(result) )
+    .catch( err => console.log(err) );
+}
